@@ -10,12 +10,11 @@ const searchPhone = () => {
 
 const displaySearchResult = resultData => {
   const productContainer = document.getElementById('product-container');
-  // for (const result of resultData) {
-  //   console.log(result.phone_name);
-  // }
+  productContainer.textContent = '';
+  // search loop
   resultData.forEach(productData => {
+    console.log(productData);
     const div = document.createElement('div');
-    div.classList.add('col');
     div.innerHTML = `
     <div class="col">
     <div class="card h-100">
@@ -25,12 +24,17 @@ const displaySearchResult = resultData => {
         <p class="card-text">Brand: ${productData.brand}</p>
       </div>
       <div class="card-footer">
-      <button type="button" class="btn btn-primary d-block w-100">Details</button>
+      <button onclick="loadPhoneDetails('${productData.slug}')" type="button" class="btn btn-primary d-block w-100">Details</button>
       </div>
     </div>
   </div>
     `;
     productContainer.appendChild(div);
   });
-  console.log(resultData)
+};
+
+// Phone Details funtion
+
+const loadPhoneDetails = phoneId => {
+  console.log(phoneId);
 }
