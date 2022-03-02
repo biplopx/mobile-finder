@@ -57,13 +57,13 @@ const displayPhoneDetails = product => {
   const productDetails = document.getElementById('product-details');
   productDetails.textContent = "";
   const div = document.createElement('div');
-  div.classList.add('card');
+  div.classList.add('card', 'mx-auto');
   div.innerHTML = `
   <img src="${product.image}" width="300px" class="d-block mx-auto mt-3" alt="${product.phone_name}">
         <div class="card-body">
           <h2 class="fs-3 fw-bold">${product.name}</h2>
           <p><strong>Release Date:</strong> ${product.releaseDate != "" ? product.releaseDate : "Comming Soon"}</p>
-        <div class="table-responsive-sm">
+        <div class="table-responsive table-details">
           <table class="table table-bordered">
             <tbody">
             <tr>
@@ -107,14 +107,21 @@ const displayPhoneDetails = product => {
 
   // Product Other Info showing
   keypair = Object.keys(product.others);
-  keypair.forEach(otherFeatures => {
-    // console.log(product.others[otherFeatures]);
-    const otherTr = document.getElementById('others-tr');
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
+  if (keypair === null) {
+    console.log("No OTher info");
+  }
+  else {
+
+    keypair.forEach(otherFeatures => {
+      // console.log(product.others[otherFeatures]);
+      const otherTr = document.getElementById('others-tr');
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
                 <td class="bg-light"> <strong>${otherFeatures}</strong> </td>
                 <td>${product.others[otherFeatures]}</td> `
-    otherTr.after(tr);
-  });
+      otherTr.after(tr);
+    });
+  }
+
 
 };
