@@ -3,10 +3,10 @@
 const searchPhone = () => {
   const searchInput = document.getElementById('search-field');
   const searchText = searchInput.value;
-  searchInput.value = "";
   //reset product details
   const productDetails = document.getElementById('product-details');
   productDetails.textContent = "";
+
   if (searchText === '') {
     const error = document.getElementById('error');
     error.classList.remove('d-none');
