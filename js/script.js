@@ -1,12 +1,25 @@
+// Search Phone Button
+
 const searchPhone = () => {
   const searchInput = document.getElementById('search-field');
-  searchText = searchInput.value;
+  const searchText = searchInput.value;
   searchInput.value = "";
-  const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
-  fetch(url)
-    .then(res => res.json())
-    .then(data => displaySearchResult(data.data));
+  //reset product details
+  const productDetails = document.getElementById('product-details');
+  productDetails.textContent = "";
+  if (searchText === '') {
+    const error = document.getElementById('error');
+    error.classList.remove('d-none');
+    error.innerText = "Please type mobile name";
+  } else {
+    const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => displaySearchResult(data.data));
+  }
+
 }
+// Display Results
 
 const displaySearchResult = resultData => {
   if (resultData.length === 0) {
@@ -14,8 +27,12 @@ const displaySearchResult = resultData => {
     error.classList.remove('d-none');
     error.innerText = "No Search Result Found";
   }
+
   else {
+    const error = document.getElementById('error');
     error.classList.add('d-none');
+    const searchContainer = document.getElementById('search-container');
+    searchContainer.classList.add('border');
     const first20Result = resultData.slice(0, 20);
     // console.log(first20Result);
     const productContainer = document.getElementById('product-container');
@@ -27,7 +44,7 @@ const displaySearchResult = resultData => {
       div.innerHTML = `
     <div class="col">
     <div class="card h-100">
-      <img src="${productData.image}" width="300px" class="d-block mx-auto mt-3" alt="${productData.phone_name}">
+      <img src="${productData.image}" width="200px" class="d-block mx-auto mt-3" alt="${productData.phone_name}">
       <div class="card-body">
         <h5 class="card-title fw-bold">${productData.phone_name}</h5>
         <p class="card-text">Brand: ${productData.brand}</p>
@@ -53,17 +70,20 @@ const loadPhoneDetails = phoneId => {
     .then(data => displayPhoneDetails(data.data))
 }
 
+
+// Display Phone Details
+
 const displayPhoneDetails = product => {
   const productDetails = document.getElementById('product-details');
   productDetails.textContent = "";
   const div = document.createElement('div');
-  div.classList.add('card', 'mx-auto');
+  div.classList.add('card', 'mx-auto', 'border-0');
   div.innerHTML = `
   <img src="${product.image}" width="300px" class="d-block mx-auto mt-3" alt="${product.phone_name}">
         <div class="card-body">
           <h2 class="fs-3 fw-bold">${product.name}</h2>
           <p><strong>Release Date:</strong> ${product.releaseDate != "" ? product.releaseDate : "Comming Soon"}</p>
-        <div class="table-responsive table-details">
+        <div class="table-responsive table-sm table-details">
           <table class="table table-bordered">
             <tbody">
             <tr>
@@ -95,7 +115,7 @@ const displayPhoneDetails = product => {
                   <td>${product.mainFeatures.sensors}</td>
               </tr>
 
-              <tr id="others-tr">
+              <tr id="others-tr" class="d-none">
               <td colspan="2" style="text-align:left" class="bg-light fw-bold">Others:</td>
               </tr>
             </tbody>
@@ -106,15 +126,13 @@ const displayPhoneDetails = product => {
   productDetails.appendChild(div);
 
   // Product Other Info showing
-  keypair = Object.keys(product.others);
-  if (keypair === null) {
-    console.log("No OTher info");
-  }
-  else {
 
+  if ('others' in product) {
+    keypair = Object.keys(product.others);
     keypair.forEach(otherFeatures => {
       // console.log(product.others[otherFeatures]);
       const otherTr = document.getElementById('others-tr');
+      otherTr.classList.remove('d-none');
       const tr = document.createElement("tr");
       tr.innerHTML = `
                 <td class="bg-light"> <strong>${otherFeatures}</strong> </td>
@@ -122,6 +140,5 @@ const displayPhoneDetails = product => {
       otherTr.after(tr);
     });
   }
-
 
 };
