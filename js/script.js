@@ -1,6 +1,7 @@
 // Search Phone Button
 
 const searchPhone = () => {
+  document.getElementById('loading').classList.remove("d-none");
   const searchInput = document.getElementById('search-field');
   const searchText = searchInput.value;
   //reset product details
@@ -8,6 +9,7 @@ const searchPhone = () => {
   productDetails.textContent = "";
 
   if (searchText === '') {
+    document.getElementById('loading').classList.add("d-none");
     const error = document.getElementById('error');
     error.classList.remove('d-none');
     error.innerText = "Please type mobile name or model";
@@ -26,10 +28,16 @@ const searchPhone = () => {
 // Display Results
 
 const displaySearchResult = resultData => {
+  document.getElementById('loading').classList.add("d-none");
+  // get input value
+  const searchInput = document.getElementById('search-field');
+  const searchText = searchInput.value;
   if (resultData.length === 0) {
     const error = document.getElementById('error');
     error.classList.remove('d-none');
-    error.innerText = "No Search Result Found";
+    error.innerText = `No search result found for "${searchText}"`;
+    const productContainer = document.getElementById('product-container');
+    productContainer.textContent = '';
   }
 
   else {
@@ -78,6 +86,8 @@ const loadPhoneDetails = phoneId => {
 // Display Phone Details
 
 const displayPhoneDetails = product => {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   const productDetails = document.getElementById('product-details');
   productDetails.textContent = "";
   const div = document.createElement('div');
