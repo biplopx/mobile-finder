@@ -10,7 +10,9 @@ const searchPhone = () => {
   if (searchText === '') {
     const error = document.getElementById('error');
     error.classList.remove('d-none');
-    error.innerText = "Please type mobile name";
+    error.innerText = "Please type mobile name or model";
+    const productContainer = document.getElementById('product-container');
+    productContainer.textContent = '';
   } else {
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
     fetch(url)
@@ -18,7 +20,9 @@ const searchPhone = () => {
       .then(data => displaySearchResult(data.data));
   }
 
-}
+};
+
+
 // Display Results
 
 const displaySearchResult = resultData => {
@@ -130,7 +134,6 @@ const displayPhoneDetails = product => {
   if ('others' in product) {
     keypair = Object.keys(product.others);
     keypair.forEach(otherFeatures => {
-      // console.log(product.others[otherFeatures]);
       const otherTr = document.getElementById('others-tr');
       otherTr.classList.remove('d-none');
       const tr = document.createElement("tr");
