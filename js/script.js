@@ -9,16 +9,25 @@ const searchPhone = () => {
 }
 
 const displaySearchResult = resultData => {
-  const productContainer = document.getElementById('product-container');
-  productContainer.textContent = '';
-  // search loop
-  resultData.forEach(productData => {
-    // console.log(productData);
-    const div = document.createElement('div');
-    div.innerHTML = `
+  if (resultData.length === 0) {
+    const error = document.getElementById('error');
+    error.classList.remove('d-none');
+    error.innerText = "No Search Result Found";
+  }
+  else {
+    error.classList.add('d-none');
+    const first20Result = resultData.slice(0, 20);
+    // console.log(first20Result);
+    const productContainer = document.getElementById('product-container');
+    productContainer.textContent = '';
+    // search loop
+    first20Result.forEach(productData => {
+      // console.log(productData);
+      const div = document.createElement('div');
+      div.innerHTML = `
     <div class="col">
     <div class="card h-100">
-      <img src="${productData.image}" width="300px" class="img-thumbnail d-block mx-auto mt-3" alt="${productData.phone_name}">
+      <img src="${productData.image}" width="300px" class="d-block mx-auto mt-3" alt="${productData.phone_name}">
       <div class="card-body">
         <h5 class="card-title fw-bold">${productData.phone_name}</h5>
         <p class="card-text">Brand: ${productData.brand}</p>
@@ -29,8 +38,10 @@ const displaySearchResult = resultData => {
     </div>
   </div>
     `;
-    productContainer.appendChild(div);
-  });
+      productContainer.appendChild(div);
+    });
+  }
+
 };
 
 // Phone Details funtion
@@ -43,21 +54,18 @@ const loadPhoneDetails = phoneId => {
 }
 
 const displayPhoneDetails = product => {
-  console.log(product);
   const productDetails = document.getElementById('product-details');
-  productDetails.textContent = '';
+  productDetails.textContent = "";
   const div = document.createElement('div');
   div.classList.add('card');
   div.innerHTML = `
-  <img src="${product.image}" width="300px" class="img-thumbnail d-block mx-auto mt-3" alt="${product.phone_name}">
+  <img src="${product.image}" width="300px" class="d-block mx-auto mt-3" alt="${product.phone_name}">
         <div class="card-body">
           <h2 class="fs-3 fw-bold">${product.name}</h2>
-          <p><strong>Release Date:</strong> ${product.releaseDate}</p>
-        <div class="m-3">
-          <h4 style="font-size: 18px; text-align: left; font-weight: bold;">Main Features:</h4>
+          <p><strong>Release Date:</strong> ${product.releaseDate != "" ? product.releaseDate : "Comming Soon"}</p>
+        <div class="table-responsive-sm">
           <table class="table table-bordered">
-            <tbody>
-
+            <tbody">
             <tr>
             <td colspan="2" style="text-align:left" class="bg-light fw-bold">Main Features:</td>
             </tr>
@@ -86,10 +94,27 @@ const displayPhoneDetails = product => {
               <td class="bg-light"> <strong>Sensor</strong> </td>
                   <td>${product.mainFeatures.sensors}</td>
               </tr>
+
+              <tr id="others-tr">
+              <td colspan="2" style="text-align:left" class="bg-light fw-bold">Others:</td>
+              </tr>
             </tbody>
           </table>
         </div>
         </div>
   `;
   productDetails.appendChild(div);
-}
+
+  // Product Other Info showing
+  keypair = Object.keys(product.others);
+  keypair.forEach(otherFeatures => {
+    // console.log(product.others[otherFeatures]);
+    const otherTr = document.getElementById('others-tr');
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+                <td class="bg-light"> <strong>${otherFeatures}</strong> </td>
+                <td>${product.others[otherFeatures]}</td> `
+    otherTr.after(tr);
+  });
+
+};
