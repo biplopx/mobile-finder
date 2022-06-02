@@ -25,7 +25,7 @@ const searchPhone = () => {
 };
 
 
-// Display Results
+// Display Results items
 
 const displaySearchResult = resultData => {
   document.getElementById('loading').classList.add("d-none");
